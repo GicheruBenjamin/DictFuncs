@@ -1,49 +1,44 @@
-
 from typing import Callable
 
-def add(a : int, b : int) -> int:
-    try:
-        return a + b
-    except Exception as e:
-        print(f"Error addind stuff coz of {e}")
-        return 0
+Operation = Callable[[int, int], float]
 
+def add(a: int, b: int) -> float:
+    return a + b
 
-def sub(a : int, b : int) -> int:
-    try:
-        return a - b
-    except Exception as e:
-        print(f"Error subtracting stuff coz of {e}")
-        return 0
+def sub(a: int, b: int) -> float:
+    return a - b
 
-def mul(a : int, b : int) -> int:
-    try:
-        return a * b
-    except Exception as e:
-        print(f"Error multiplying stuff coz of {e}")
-        return 0
+def mul(a: int, b: int) -> float:
+    return a * b
 
-
-def div(a : int, b : int) -> int:
+def div(a: int, b: int) -> float:
     try:
         return a / b
-    except Exception as e:
-        print(f"Error dividing stuff coz of {e}")
-        return 0
+    except ZeroDivisionError:
+        print("Cannot divide by zero.")
+        return 0.0
 
-ops : dict[str, Callable] = {
-    "add" : add,
-    "sub" : sub,
-    "mul" : mul,
-    "div" : div
+ops: dict[str, Operation] = {
+    "add": add,
+    "sub": sub,
+    "mul": mul,
+    "div": div
 }
 
+def get_int(prompt: str) -> int:
+    while True:
+        try:
+            return int(input(prompt))
+        except ValueError:
+            print("Please enter a valid integer.")
+
 def main():
-    value_one: int = int(input("Enter first number: "))
-    value_two: int = int(input("Enter second number: "))
-    operation: str = input("Enter operation: ")
+    value_one = get_int("Enter first number: ")
+    value_two = get_int("Enter second number: ")
+    operation = input("Enter operation (add, sub, mul, div): ").strip()
+
     if operation in ops:
-        result: int = ops[operation](value_one, value_two)
+        result = ops[operation](value_one, value_two)
         print(f"Result: {result}")
     else:
         print(f"Invalid operation: {operation}")
